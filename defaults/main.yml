@@ -1,0 +1,15 @@
+---
+mongodb_version: 3.2
+mongodb_net_port: 27017
+mongodb_net_ips:
+  - 127.0.0.1
+mongodb_systemLog_verbosity: 0
+
+mongodb_admin_user: admin
+mongodb_admin_pass: admin
+mongodb_users: []
+  # Fields
+  # - name:
+  #   password:
+  #   database:
+  #   roles: (optional) see 'roles' in http://docs.ansible.com/ansible/mongodb_user_module.html

@@ -1,0 +1,32 @@
+---
+- name: Add repository
+  yum_repository: name=mongodb-org-{{mongodb_version}} description=MongoDB baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/{{mongodb_version}}/$basearch/ gpgkey=https://www.mongodb.org/static/pgp/server-{{mongodb_version}}.asc gpgcheck=yes enabled=no state=present
+
+- name: Install MongoDB and dependencies
+  yum: name={{item}} state=latest enablerepo=mongodb-org-{{mongodb_version}}
+  with_items:
+    - mongodb-org
+    - python-pip
+
+- name: Install pymongo
+  pip: name=pymongo state=present
+
+- name: Ensure directories are present
+  file: path={{item}} owner=mongod group=mongod mode=0755 state=directory
+  with_items:
+    - /var/lib/mongo
+    - /var/log/mongodb
+    - /var/run/mongodb
+
+- name: Configure
+  template: dest=/etc/mongod.conf src=mongod.conf.j2 owner=root group=root mode=0644
+  notify: Restart mongod
+
+- name: Enable service
+  service: name=mongod state=started enabled=yes
+
+- include: set_authorization.yml
+
+- name: Add users
+  mongodb_user: name={{item.name}} password={{item.password}} roles={{item.roles | default(omit)}} database={{item.database}} state=present login_user='{{mongodb_admin_user}}' login_password='{{mongodb_admin_pass}}'
+  with_items: '{{mongodb_users}}'

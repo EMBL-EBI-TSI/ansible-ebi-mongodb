@@ -1,0 +1,26 @@
+---
+- name: Check authentication
+  command: mongo --quiet --eval 'db.getUser("{{mongodb_admin_user}}")' admin -u '{{mongodb_admin_user}}' -p '{{mongodb_admin_pass}}' --authenticationDatabase admin
+  ignore_errors: true
+  register: authz
+  changed_when: false
+
+- block:
+  - name: Stop mongod
+    service: name=mongod state=stopped
+
+  - name: Disable Authorization
+    template: dest=/etc/mongod.conf src=mongod.conf.j2 owner=root group=root mode=0644
+    vars:
+      mongodb_authorization: disabled
+  - name: Start mongod
+    service: name=mongod state=started
+
+  - name: Add admin user
+    mongodb_user: name='{{mongodb_admin_user}}' password='{{mongodb_admin_pass}}' database=admin roles='userAdminAnyDatabase' state=present
+
+  - name: Reenable Authorization
+    template: dest=/etc/mongod.conf src=mongod.conf.j2 owner=root group=root mode=0644
+    notify: Restart mongod
+
+  when: authz.rc > 0 or authz.stdout == 'null'
