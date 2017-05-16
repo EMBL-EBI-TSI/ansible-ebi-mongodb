@@ -2,7 +2,7 @@
 - name: Check authentication
   command: mongo --quiet --eval 'db.getUser("{{mongodb_admin_user}}")' admin -u '{{mongodb_admin_user}}' -p '{{mongodb_admin_pass}}' --authenticationDatabase admin
   ignore_errors: true
-  register: authz
+  register: mongodb__r_authz
   changed_when: false
 
 - block:
@@ -23,4 +23,4 @@
     template: dest=/etc/mongod.conf src=mongod.conf.j2 owner=root group=root mode=0644
     notify: Restart mongod
 
-  when: authz.rc > 0 or authz.stdout == 'null'
+  when: mongodb__r_authz.rc > 0 or mongodb__r_authz.stdout == 'null'
