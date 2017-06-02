@@ -12,7 +12,7 @@ See `defaults/main.yml`.
 
 Dependencies
 ------------
-None.
+Depends on EPEL repository being present to install `python-pip` (ie role `geerlingguy.repo-epel`).
 
 Example Playbook
 ----------------
@@ -20,7 +20,8 @@ Example:
 ```
 - hosts: servers
   roles:
-  - luisico.mongodb
+    - geerlingguy.repo-epel
+    - mongodb
 ```
 
 TODO
