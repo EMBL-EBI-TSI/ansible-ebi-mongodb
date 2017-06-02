@@ -1,6 +1,5 @@
 Webapp
 ======
-
 Deploy MongoDB.
 
 Requirements
@@ -21,11 +20,12 @@ Example:
 ```
 - hosts: servers
   roles:
-  - mongodb
+  - luisico.mongodb
 ```
 
 TODO
 ----
+- Select mongodb version to install.
 
 Licence
 -------
