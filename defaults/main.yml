@@ -1,12 +1,22 @@
 ---
+# Version to install
 mongodb_version: 3.2
+
+# Listen to this port
 mongodb_net_port: 27017
+
+# Listen to these IPs
 mongodb_net_ips:
   - 127.0.0.1
+
+# Log verbosity
 mongodb_systemLog_verbosity: 0
 
+# Authentication
 mongodb_admin_user: admin
 mongodb_admin_pass: admin
+
+# List of users
 mongodb_users: []
   # Fields
   # - name:

@@ -2,13 +2,17 @@ Webapp
 ======
 Deploy MongoDB.
 
+MongoDB is installed from the official MongoDB repositories. A MongoDB version can be specify in `mongodb_version`. Pymongo is also installed as a dependency using PIP.
+
 Requirements
 ------------
 See `meta/main.yml`.
 
 Role Variables
 --------------
-See `defaults/main.yml`.
+Authentication is managed in a separate `admin` database. The admin user credentials are set in `mongodb_admin_user` and `mongodb_admin_pass`.
+
+A list of users can be specified in `mongodb_users`. See `defaults/main.yml` for more details.
 
 Dependencies
 ------------
